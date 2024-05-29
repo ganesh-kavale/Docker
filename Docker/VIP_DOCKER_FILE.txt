@@ -1,0 +1,322 @@
+
+docker version
+
+docker info
+
+docker images 
+
+docker search imageName
+docker --help
+
+docker container ls
+
+docker container run name
+
+here ex. is name = nginx
+
+docker container run nginx
+
+docker --help
+
+docker container rm containerId 			--> to remove container by Id and for multiple remove, seperate containerId by space
+
+docker container rm containerId1  containerId2 containerId3 containerId4
+
+docker container ls -a			---> for all list of containers created.
+
+docker container run ubuntu sleep 30
+
+docker container start containerId
+
+docker container stop containerId
+
+docker image ls
+
+docker network ls
+
+#Forentering into respective container command as:
+
+docker container run -it name /bin/bash
+
+for example running ubuntu:
+docker container run -it ubuntu /bin/bash
+(docker container run  --name jdkContainer -it -d openjdk) 					----> With dummy or alias name can be given like this.
+
+#To check which host or container running , it will display Id of container
+hostname
+
+
+# Command to give details about container
+cat /etc/os-release
+
+ctrl + p + q 			-----> Used for exiting from container and keep that container running at background
+
+exit 					----> Used for  exiting from container and keep that container closed
+
+docker container ls -aq   		----> It will give you all containerId'seperate
+
+#To remove all container from the docker use below if(		docker container rm (docker container ls -aq)  after this unknown shorthand flag: 'a' in -aq)
+See 'docker rm --help'. yhis is comming  ) use below one.'
+
+FOR /F "tokens=*" %i IN ('docker ps -aq') DO docker rm %i
+
+# To start container and run at background                 (here d means detach)
+docker container run -d name
+
+Example:
+docker container run -d nginx
+
+/exit  			---> exit  from the respective container
+
+docker exec -it  jdkContainer jshell				------> For executing respective container
+
+
+docker ps -a		------> List of alll containers.
+
+docker ps 		------> List of alll running containers.
+
+docker ps -a -f "name=my-mysql-container"		----> f means filter used for filtering images
+
+docker inspect mysqlDB		----> inspect using imageName or alias name
+
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
+
+To enter into mysql  ===========>
+
+C:\Users\Ganesh>docker exec -it mysqlDB bash
+bash-5.1# mysql -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.4.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+Use directly database commands
+
+
+docker build -t imageName .				----> Used for building an image
+
+-------------------------------------------------------------->>
+
+
+DOCKER TEMPLATE
+
+# Step 1: Specify the base image
+FROM <base_image>:<tag>
+
+# Step 2: Add metadata to the image
+LABEL maintainer="your_email@example.com"
+LABEL version="1.0"
+LABEL description="Description of the application"
+
+# Step 3: Set environment variables
+ENV ENV_VAR_NAME=default_value
+
+# Step 4: Set the working directory
+WORKDIR /app
+
+# Step 5: Copy application files
+COPY . /app
+
+# Step 6: Install dependencies (if any)
+# This varies by language/framework. Here are a few examples:
+
+# For Node.js
+# COPY package*.json ./
+# RUN npm install
+
+# For Python
+# COPY requirements.txt ./
+# RUN pip install -r requirements.txt
+
+# For Java
+# COPY pom.xml ./
+# RUN mvn install
+
+# Step 7: Add any additional files or directories (if needed)
+# ADD <src> <dest>
+# COPY <src> <dest>
+
+# Step 8: Run commands to set up the environment (if needed)
+# RUN <command>
+
+# Step 9: Expose the application port (if applicable)
+EXPOSE <port_number>
+
+# Step 10: Specify the entry point and/or command
+# CMD ["executable", "param1", "param2"]
+# ENTRYPOINT ["executable", "param1", "param2"]
+
+# Step 11: Define volume mounts (if applicable)
+VOLUME ["/data"]
+
+# Step 12: Set the user (if needed)
+USER <user>
+
+# Optional: Clean up to reduce image size
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+
+
+
+--->>>>>>>>>>>>>>>>>>
+
+
+
+
+Sure! Here's a general template for creating a Dockerfile that can be adapted for various types of applications, including web servers, databases, and custom software. This template includes the most common instructions and explains their purpose.
+
+General Dockerfile Template
+Dockerfile
+Copy code
+# Step 1: Specify the base image
+FROM <base_image>:<tag>
+
+# Step 2: Add metadata to the image
+LABEL maintainer="your_email@example.com"
+LABEL version="1.0"
+LABEL description="Description of the application"
+
+# Step 3: Set environment variables
+ENV ENV_VAR_NAME=default_value
+
+# Step 4: Set the working directory
+WORKDIR /app
+
+# Step 5: Copy application files
+COPY . /app
+
+# Step 6: Install dependencies (if any)
+# This varies by language/framework. Here are a few examples:
+
+# For Node.js
+# COPY package*.json ./
+# RUN npm install
+
+# For Python
+# COPY requirements.txt ./
+# RUN pip install -r requirements.txt
+
+# For Java
+# COPY pom.xml ./
+# RUN mvn install
+
+# Step 7: Add any additional files or directories (if needed)
+# ADD <src> <dest>
+# COPY <src> <dest>
+
+# Step 8: Run commands to set up the environment (if needed)
+# RUN <command>
+
+# Step 9: Expose the application port (if applicable)
+EXPOSE <port_number>
+
+# Step 10: Specify the entry point and/or command
+# CMD ["executable", "param1", "param2"]
+# ENTRYPOINT ["executable", "param1", "param2"]
+
+# Step 11: Define volume mounts (if applicable)
+VOLUME ["/data"]
+
+# Step 12: Set the user (if needed)
+USER <user>
+
+# Optional: Clean up to reduce image size
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+Example Dockerfiles for Different Applications
+1. Node.js Application
+Dockerfile
+Copy code
+FROM node:14
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+2. Python Flask Application
+Dockerfile
+Copy code
+FROM python:3.9
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+3. Java Spring Boot Application
+Dockerfile
+Copy code
+FROM openjdk:11
+
+WORKDIR /app
+
+COPY target/myapp.jar myapp.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "myapp.jar"]
+4. Static Website using Nginx
+Dockerfile
+Copy code
+FROM nginx:latest
+
+COPY . /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+5. PostgreSQL Database
+Dockerfile
+Copy code
+FROM postgres:13
+
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
+ENV POSTGRES_DB=mydatabase
+
+EXPOSE 5432
+Detailed Explanation of Instructions
+FROM: Specifies the base image to use.
+LABEL: Adds metadata to the image.
+ENV: Sets environment variables.
+WORKDIR: Sets the working directory inside the container.
+COPY/ADD: Copies files from the host system to the container. ADD can also handle remote file URLs and tar archives.
+RUN: Executes commands in the container during the build process (e.g., installing dependencies).
+EXPOSE: Documents the port on which the container will listen at runtime.
+CMD: Specifies the command to run when the container starts.
+ENTRYPOINT: Configures a container to run as an executable.
+VOLUME: Creates a mount point for persistent data.
+USER: Sets the user to run the container as.
+
+
+
+
+
+
+
+
+
+
+
+
+
