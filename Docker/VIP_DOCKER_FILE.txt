@@ -1,3 +1,6 @@
+================================================================================
+
+Docker commands:
 
 docker version
 
@@ -98,144 +101,28 @@ owners.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-
 Use directly database commands
-
 
 docker build -t imageName .				----> Used for building an image
 
--------------------------------------------------------------->>
+=============================================================================================================
 
+DOCKER TEMPLATES (Dockerfiles)
 
-DOCKER TEMPLATE
+1. For Java Spring Boot Application
 
-# Step 1: Specify the base image
-FROM <base_image>:<tag>
+FROM openjdk:11
 
-# Step 2: Add metadata to the image
-LABEL maintainer="your_email@example.com"
-LABEL version="1.0"
-LABEL description="Description of the application"
-
-# Step 3: Set environment variables
-ENV ENV_VAR_NAME=default_value
-
-# Step 4: Set the working directory
 WORKDIR /app
 
-# Step 5: Copy application files
-COPY . /app
+COPY target/myapp.jar myapp.jar
 
-# Step 6: Install dependencies (if any)
-# This varies by language/framework. Here are a few examples:
+EXPOSE 8080
 
-# For Node.js
-# COPY package*.json ./
-# RUN npm install
+CMD ["java", "-jar", "myapp.jar"]
 
-# For Python
-# COPY requirements.txt ./
-# RUN pip install -r requirements.txt
+2. For Angular and Node.js Application
 
-# For Java
-# COPY pom.xml ./
-# RUN mvn install
-
-# Step 7: Add any additional files or directories (if needed)
-# ADD <src> <dest>
-# COPY <src> <dest>
-
-# Step 8: Run commands to set up the environment (if needed)
-# RUN <command>
-
-# Step 9: Expose the application port (if applicable)
-EXPOSE <port_number>
-
-# Step 10: Specify the entry point and/or command
-# CMD ["executable", "param1", "param2"]
-# ENTRYPOINT ["executable", "param1", "param2"]
-
-# Step 11: Define volume mounts (if applicable)
-VOLUME ["/data"]
-
-# Step 12: Set the user (if needed)
-USER <user>
-
-# Optional: Clean up to reduce image size
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-
-
-
-
---->>>>>>>>>>>>>>>>>>
-
-
-
-
-Sure! Here's a general template for creating a Dockerfile that can be adapted for various types of applications, including web servers, databases, and custom software. This template includes the most common instructions and explains their purpose.
-
-General Dockerfile Template
-Dockerfile
-Copy code
-# Step 1: Specify the base image
-FROM <base_image>:<tag>
-
-# Step 2: Add metadata to the image
-LABEL maintainer="your_email@example.com"
-LABEL version="1.0"
-LABEL description="Description of the application"
-
-# Step 3: Set environment variables
-ENV ENV_VAR_NAME=default_value
-
-# Step 4: Set the working directory
-WORKDIR /app
-
-# Step 5: Copy application files
-COPY . /app
-
-# Step 6: Install dependencies (if any)
-# This varies by language/framework. Here are a few examples:
-
-# For Node.js
-# COPY package*.json ./
-# RUN npm install
-
-# For Python
-# COPY requirements.txt ./
-# RUN pip install -r requirements.txt
-
-# For Java
-# COPY pom.xml ./
-# RUN mvn install
-
-# Step 7: Add any additional files or directories (if needed)
-# ADD <src> <dest>
-# COPY <src> <dest>
-
-# Step 8: Run commands to set up the environment (if needed)
-# RUN <command>
-
-# Step 9: Expose the application port (if applicable)
-EXPOSE <port_number>
-
-# Step 10: Specify the entry point and/or command
-# CMD ["executable", "param1", "param2"]
-# ENTRYPOINT ["executable", "param1", "param2"]
-
-# Step 11: Define volume mounts (if applicable)
-VOLUME ["/data"]
-
-# Step 12: Set the user (if needed)
-USER <user>
-
-# Optional: Clean up to reduce image size
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-Example Dockerfiles for Different Applications
-1. Node.js Application
-Dockerfile
-Copy code
 FROM node:14
 
 WORKDIR /app
@@ -248,9 +135,9 @@ COPY . .
 EXPOSE 3000
 
 CMD ["node", "server.js"]
-2. Python Flask Application
-Dockerfile
-Copy code
+
+3. For Python Flask Application
+
 FROM python:3.9
 
 WORKDIR /app
@@ -263,21 +150,9 @@ COPY . .
 EXPOSE 5000
 
 CMD ["python", "app.py"]
-3. Java Spring Boot Application
-Dockerfile
-Copy code
-FROM openjdk:11
 
-WORKDIR /app
+4.For Nginx
 
-COPY target/myapp.jar myapp.jar
-
-EXPOSE 8080
-
-CMD ["java", "-jar", "myapp.jar"]
-4. Static Website using Nginx
-Dockerfile
-Copy code
 FROM nginx:latest
 
 COPY . /usr/share/nginx/html
@@ -285,9 +160,9 @@ COPY . /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
-5. PostgreSQL Database
-Dockerfile
-Copy code
+
+5. For PostgreSQL Database
+
 FROM postgres:13
 
 ENV POSTGRES_USER=myuser
@@ -295,17 +170,29 @@ ENV POSTGRES_PASSWORD=mypassword
 ENV POSTGRES_DB=mydatabase
 
 EXPOSE 5432
-Detailed Explanation of Instructions
+
+Detailed Explanation of Instructions: 
+ 
 FROM: Specifies the base image to use.
+
 LABEL: Adds metadata to the image.
+
 ENV: Sets environment variables.
+
 WORKDIR: Sets the working directory inside the container.
+
 COPY/ADD: Copies files from the host system to the container. ADD can also handle remote file URLs and tar archives.
+
 RUN: Executes commands in the container during the build process (e.g., installing dependencies).
+
 EXPOSE: Documents the port on which the container will listen at runtime.
+
 CMD: Specifies the command to run when the container starts.
+
 ENTRYPOINT: Configures a container to run as an executable.
+
 VOLUME: Creates a mount point for persistent data.
+
 USER: Sets the user to run the container as.
 
 
